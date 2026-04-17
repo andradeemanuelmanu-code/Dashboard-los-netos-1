@@ -108,7 +108,7 @@ const TrendingUp = (props) => <LocalIcon {...props} type="trend" />;
 
 const kpis = [
   { titulo: "Receita total do período", valor: "R$ 6.468.994,19", detalhe: "Jan/25 a Mar/26", icon: TrendingUp },
-  { titulo: "Quantidade vendida", valor: "38.615 un.", detalhe: "Volume total vendido", icon: ShoppingCart },
+  { titulo: "Quantidade vendida", valor: "38.824 un.", detalhe: "Volume total vendido", icon: ShoppingCart },
   { titulo: "Estoque atual", valor: "66.311 un.", detalhe: "Saldo físico consolidado", icon: Boxes },
   { titulo: "Referências ativas", valor: "14.367", detalhe: "Com registro de venda no período", icon: BarChart3 },
 ];
@@ -134,7 +134,7 @@ const receitaMensal = [
 const qtdMensal = [
   { mes: "Jan/25", qtd: 2424 },
   { mes: "Fev/25", qtd: 2316 },
-  { mes: "Mar/25", qtd: 2267 },
+  { mes: "Mar/25", qtd: 2476 },
   { mes: "Abr/25", qtd: 2654 },
   { mes: "Mai/25", qtd: 2974 },
   { mes: "Jun/25", qtd: 2593 },
