@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color: #0f172a;
+  background: #f6f4ee;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #f6f4ee;
+}
+
+button {
+  font: inherit;
+}
+
+.screen-print-preview {
+  padding: 24px 12px 48px;
+}
+
+.screen-print-preview > main {
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.14);
+}
+
+@page {
+  size: A4 portrait;
+  margin: 10mm;
+}
+
+@media print {
+  html,
+  body,
+  #root {
+    width: 210mm;
+    min-height: 297mm;
+    background: #ffffff !important;
+  }
+
+  body {
+    margin: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  main {
+    width: 100% !important;
+    min-height: auto !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+  }
+
+  section,
+  table,
+  tr,
+  article {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  .recharts-wrapper {
+    break-inside: avoid;
+  }
+}
