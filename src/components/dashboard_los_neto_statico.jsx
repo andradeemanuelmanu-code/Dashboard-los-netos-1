@@ -110,7 +110,8 @@ const kpis = [
   { titulo: "Receita total do período", valor: "R$ 6.468.994,19", detalhe: "Jan/25 a Mar/26", icon: TrendingUp },
   { titulo: "Quantidade vendida", valor: "38.824 un.", detalhe: "Volume total vendido", icon: ShoppingCart },
   { titulo: "Estoque atual", valor: "66.311 un.", detalhe: "Saldo físico consolidado", icon: Boxes },
-  { titulo: "Referências ativas", valor: "14.367", detalhe: "Com registro de venda no período", icon: BarChart3 },
+  { titulo: "Baixo giro em estoque", valor: "R$ 2.174.734,97", detalhe: "13.754 produtos/códigos com 1 a 10 vendas no período", icon: PackageSearch },
+  { titulo: "Estoque sem saída", valor: "26.431 un.", detalhe: "11.733 produtos/códigos sem registro de saída", icon: PackageX },
 ];
 
 const receitaMensal = [
@@ -194,11 +195,11 @@ const abcProduto = [
 ];
 
 const riscoRuptura = [
-  { ref: "MALA SANTINO DE BORDO", estoque: 0, receita: 30998.85, qtdVendida: 107, classe: "A" },
-  { ref: "MOCHILA SANTINO NOTEBOOK OSLO POL SAN405 AZUL MARINHO UNICO", estoque: 0, receita: 27841.78, qtdVendida: 92, classe: "A" },
-  { ref: "MALA SANTINO BORDO AMZV183P AZUL CLARO P", estoque: 0, receita: 22499.24, qtdVendida: 76, classe: "A" },
-  { ref: "SAPATO FERRACINI MT 29999", estoque: 0, receita: 17897.40, qtdVendida: 54, classe: "A" },
-  { ref: "PRODUTO QM LOSNETO QM999", estoque: 0, receita: 16645.32, qtdVendida: 475, classe: "A" },
+  { ref: "TENIS ADIDAS RESPONSE RUNNER IH6100 PRETO/BRANCO/PRETO 40", estoque: 2, receita: 6569.78, qtdVendida: 22, classe: "A" },
+  { ref: "MOCHILA CLIO RB24023 ROSA UNICO", estoque: 1, receita: 5699.87, qtdVendida: 14, classe: "A" },
+  { ref: "TENIS OLYMPIKUS CHALLENGER5 PRETO/CHUMBO 43", estoque: 3, receita: 5390.82, qtdVendida: 18, classe: "A" },
+  { ref: "BOLSA IMPT FEMININA BAOLUOLAN BL21014 DIVERSOS UNICO", estoque: 2, receita: 5111.68, qtdVendida: 30, classe: "A" },
+  { ref: "BOLSA IMPT FEMININA BAOLUOLAN BL21015 DIVERSOS UNICO", estoque: 3, receita: 4630.74, qtdVendida: 26, classe: "A" },
 ];
 
 const excessoEstoque = [
@@ -304,6 +305,26 @@ function Badge({ className = "", children }) {
   );
 }
 
+function LogoMark() {
+  return (
+    <div className="inline-flex items-center rounded-[10px] border border-[#5a2419] bg-[#151515] px-4 py-2 shadow-[0_0_34px_rgba(214,58,23,0.18)]">
+      <span className="text-xl font-semibold uppercase tracking-[0.22em] text-[#e34a22] sm:text-2xl">Los Neto</span>
+    </div>
+  );
+}
+
+function SectionTitle({ eyebrow, title, description }) {
+  return (
+    <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#e34a22]">{eyebrow}</p>
+        <h2 className="text-base font-semibold tracking-tight text-stone-100 sm:text-lg">{title}</h2>
+      </div>
+      {description ? <p className="max-w-xl text-xs leading-5 text-stone-500 sm:text-right">{description}</p> : null}
+    </div>
+  );
+}
+
 export default function DashboardLosNeto() {
   const chartTooltip = {
     contentStyle: {
@@ -336,11 +357,18 @@ export default function DashboardLosNeto() {
 
   const decisionCards = [
     {
+      title: "Reposição",
+      value: `${prioridadeReposicao.length} itens`,
+      metric: currency(totalReposicaoReceita),
+      label: "priorizados",
+      className: "border-[#8e2415] bg-[#351915] text-[#ff7a55]",
+    },
+    {
       title: "Ruptura",
-      value: `${riscoRuptura.length} refs.`,
+      value: `${riscoRuptura.length} itens`,
       metric: currency(totalRupturaReceita),
-      label: "receita sob risco",
-      className: "border-[#7b2a1b] bg-[#331d18] text-[#ff8a66]",
+      label: "baixo estoque",
+      className: "border-[#a9462d] bg-[#332018] text-[#ff9a78]",
     },
     {
       title: "Excesso",
@@ -349,18 +377,11 @@ export default function DashboardLosNeto() {
       label: "baixo giro",
       className: "border-[#7a5c2e] bg-[#332916] text-[#f2c36b]",
     },
-    {
-      title: "Reposição",
-      value: `${prioridadeReposicao.length} itens`,
-      metric: currency(totalReposicaoReceita),
-      label: "priorizados",
-      className: "border-[#884027] bg-[#2f211d] text-[#ff9a78]",
-    },
   ];
 
   const executiveInsights = [
     { title: "Receita concentrada", text: "Classe A sustenta a maior parte do faturamento e deve guiar reposição." },
-    { title: "Ruptura imediata", text: "Itens relevantes aparecem com estoque zerado e venda comprovada." },
+    { title: "Ruptura próxima", text: "Itens Classe A ainda vendem bem, mas têm cobertura curta de estoque." },
     { title: "Capital parado", text: "Classe C reúne saldos altos com baixa movimentação." },
     { title: "Ação recomendada", text: "Repor Classe A, revisar compras de baixo giro e ajustar grade por numeração." },
   ];
@@ -409,8 +430,8 @@ export default function DashboardLosNeto() {
   };
 
   const compactTable = (columns, data, tone = "slate") => (
-    <div className="min-w-0 overflow-visible rounded-[8px] border border-stone-800">
-      <table className="w-full table-fixed text-[12px]">
+    <div className="min-w-0 overflow-x-auto rounded-[8px] border border-stone-800">
+      <table className="min-w-[560px] table-fixed text-[12px] sm:w-full sm:min-w-0">
         <thead className="bg-[#1b1b1b] text-[10px] uppercase tracking-wide text-stone-400">
           <tr>
             {columns.map((column) => (
@@ -542,41 +563,43 @@ export default function DashboardLosNeto() {
   return (
     <main className="min-h-screen bg-[#1c1c1c] text-stone-100">
       <div className="mx-auto max-w-[1360px] px-3 py-3 sm:px-4 lg:px-5">
-        <header className="mb-3 rounded-[10px] border border-[#3a211c] bg-[#202020] px-4 py-3 shadow-[0_18px_45px_rgba(0,0,0,0.22)]">
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <header className="mb-3 rounded-[14px] border border-[#3a211c] bg-[linear-gradient(135deg,#242424_0%,#1a1a1a_58%,#241713_100%)] px-4 py-4 shadow-[0_22px_55px_rgba(0,0,0,0.28)] sm:px-5">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded bg-[#d63a17] px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_0_18px_rgba(214,58,23,0.22)]">Los Neto</span>
-                <span className="rounded border border-stone-700 bg-[#171717] px-2 py-1 text-[11px] font-semibold text-stone-300">Jan/25 a Mar/26</span>
-                <span className="rounded border border-stone-700 bg-[#171717] px-2 py-1 text-[11px] font-semibold text-stone-300">Dashboard estático</span>
+              <div className="flex flex-wrap items-center gap-3">
+                <LogoMark />
+                <span className="rounded border border-stone-700 bg-[#171717] px-2.5 py-1 text-[11px] font-semibold text-stone-300">Jan/25 a Mar/26</span>
               </div>
-              <h1 className="mt-2 text-xl font-semibold tracking-tight text-stone-100 sm:text-2xl">
-                Painel executivo de vendas, estoque e reposição
+              <h1 className="mt-3 text-2xl font-semibold tracking-tight text-stone-100 sm:text-3xl">
+                Análise Vendas x Estoque
               </h1>
             </div>
-            <div className="grid grid-cols-3 gap-2 lg:w-[520px]">
+            <div className="min-w-0 lg:w-[560px]">
+              <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#e34a22]">Itens prioritários</p>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
               {decisionCards.map((card) => (
-                <div key={card.title} className={cx("rounded-[8px] border px-3 py-2", card.className)}>
+                <div key={card.title} className={cx("rounded-[10px] border px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]", card.className)}>
                   <p className="text-[10px] font-semibold uppercase tracking-wide">{card.title}</p>
                   <p className="mt-1 text-lg font-semibold leading-none text-stone-100">{card.value}</p>
                   <p className="mt-1 truncate text-[11px] font-medium">{card.metric} · {card.label}</p>
                 </div>
               ))}
+              </div>
             </div>
           </div>
         </header>
 
-        <section className="grid gap-3 lg:grid-cols-4">
+        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {kpis.map((kpi) => {
             const Icon = kpi.icon;
             return (
               <Card key={kpi.titulo} className="rounded-[10px] border-stone-800 bg-[#242424]">
-                <CardContent className="p-4">
+                <CardContent className="p-3.5 sm:p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-stone-400">{kpi.titulo}</p>
-                      <p className="mt-2 text-2xl font-semibold tracking-tight text-stone-100">{kpi.valor}</p>
-                      <p className="mt-1 truncate text-xs text-stone-500">{kpi.detalhe}</p>
+                      <p className="text-[10px] font-semibold uppercase tracking-wide text-stone-400 sm:text-[11px]">{kpi.titulo}</p>
+                      <p className="mt-2 text-xl font-semibold tracking-tight text-stone-100 sm:text-2xl">{kpi.valor}</p>
+                      <p className="mt-1 text-[11px] leading-4 text-stone-500 sm:text-xs">{kpi.detalhe}</p>
                     </div>
                     <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[8px] bg-[#331d18] text-[#ff7148]">
                       <Icon className="h-4 w-4" />
@@ -588,7 +611,13 @@ export default function DashboardLosNeto() {
           })}
         </section>
 
-        <section className="mt-3 grid gap-3 xl:grid-cols-[1.35fr_0.8fr]">
+        <section className="mt-5">
+          <SectionTitle
+            eyebrow="Vendas"
+            title="Evolução do período"
+            description="Receita e volume mostram o comportamento principal antes da leitura de estoque."
+          />
+          <div className="grid gap-3 xl:grid-cols-[1.35fr_0.8fr]">
           <Card className="min-w-0 rounded-[10px]">
             <CardHeader className="px-4 pt-4">
               <CardTitle className="text-base">Receita mensal</CardTitle>
@@ -624,9 +653,16 @@ export default function DashboardLosNeto() {
               </ResponsiveContainer>
             </CardContent>
           </Card>
+          </div>
         </section>
 
-        <section className="mt-3 grid gap-3 xl:grid-cols-2">
+        <section className="mt-5">
+          <SectionTitle
+            eyebrow="ABC"
+            title="Concentração de valor"
+            description="Classes A, B e C indicam onde o faturamento está concentrado e onde há risco de acúmulo."
+          />
+          <div className="grid gap-3 xl:grid-cols-2">
           {abcCard({
             title: "ABC por referência",
             description: "Curva por referência: valor, itens e receita.",
@@ -646,9 +682,16 @@ export default function DashboardLosNeto() {
             quantityLabel: "Itens",
             totalItems: 14367,
           })}
+          </div>
         </section>
 
-        <section className="mt-3 grid gap-3 xl:grid-cols-[1fr_1fr_1fr_1fr]">
+        <section className="mt-5">
+          <SectionTitle
+            eyebrow="Vendas"
+            title="Rankings comerciais"
+            description="Principais cortes de receita para orientar compras, exposição e reposição."
+          />
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1fr_1fr]">
           {[
             { title: "Produtos", data: topProdutos, color: brandRed },
             { title: "Referências", data: topReferencias, color: "#b74127" },
@@ -662,9 +705,16 @@ export default function DashboardLosNeto() {
               <CardContent className="h-[220px] px-2 pb-3">{rankingChart(item.data, item.color)}</CardContent>
             </Card>
           ))}
+          </div>
         </section>
 
-        <section className="mt-3 grid gap-3 xl:grid-cols-2">
+        <section className="mt-5">
+          <SectionTitle
+            eyebrow="Estoque"
+            title="Grade e cobertura"
+            description="A matriz cruza venda e estoque para separar oportunidade, equilíbrio, ruptura e excesso."
+          />
+          <div className="grid gap-3 xl:grid-cols-2">
           <Card className="min-w-0 rounded-[10px]">
             <CardHeader className="px-4 pt-4">
               <CardTitle className="text-base">Vendas por Numeração</CardTitle>
@@ -695,13 +745,13 @@ export default function DashboardLosNeto() {
               <CardTitle className="text-base">Matriz venda x estoque</CardTitle>
               <CardDescription className="text-xs">Ruptura, equilíbrio e excesso.</CardDescription>
             </CardHeader>
-            <CardContent className="h-[260px] min-w-0 px-2 pb-3">
+            <CardContent className="h-[280px] min-w-0 px-3 pb-3">
               <div className="h-full min-w-0 overflow-hidden">
                 <ResponsiveContainer width="100%" height="100%">
-                  <ScatterChart margin={{ top: 10, right: 8, bottom: 4, left: -8 }}>
+                  <ScatterChart margin={{ top: 10, right: 14, bottom: 12, left: 14 }}>
                     <CartesianGrid stroke={brandLine} strokeDasharray="3 3" />
-                    <XAxis type="number" dataKey="venda" name="Venda" tick={{ fill: brandMuted, fontSize: 10 }} width={30} axisLine={false} tickLine={false} />
-                    <YAxis type="number" dataKey="estoque" name="Estoque" tick={{ fill: brandMuted, fontSize: 10 }} width={30} axisLine={false} tickLine={false} />
+                    <XAxis type="number" dataKey="venda" name="Venda" tick={{ fill: brandMuted, fontSize: 10 }} height={28} axisLine={false} tickLine={false} />
+                    <YAxis type="number" dataKey="estoque" name="Estoque" tick={{ fill: brandMuted, fontSize: 10 }} width={44} axisLine={false} tickLine={false} />
                     <ZAxis type="number" dataKey="receita" range={[60, 260]} />
                     <Tooltip content={<ScatterTooltip />} cursor={{ strokeDasharray: "3 3" }} />
                     <Scatter data={scatterData} name="Referências" fill={brandRed} />
@@ -710,19 +760,28 @@ export default function DashboardLosNeto() {
               </div>
             </CardContent>
           </Card>
+          </div>
         </section>
 
-        <section className="mt-3 grid gap-3 xl:grid-cols-3">
-          <Card className="min-w-0 rounded-[10px] border-[#79301f] bg-[#251d1a]">
+        <section className="mt-5">
+          <SectionTitle
+            eyebrow="Ação"
+            title="Itens acionáveis"
+            description="Ruptura, reposição e excesso aparecem separados para reduzir redundância e facilitar decisão."
+          />
+          <div className="grid gap-3 xl:grid-cols-3">
+          <Card className="min-w-0 rounded-[10px] border-[#a9462d] bg-[#2c1d17]">
             <CardHeader className="px-4 pt-4">
-              <CardTitle className="text-base text-[#ff8a66]">Risco de ruptura</CardTitle>
+              <CardTitle className="text-base text-[#ff9a78]">Risco de ruptura</CardTitle>
+              <CardDescription className="text-xs">Itens Classe A com venda e baixa cobertura.</CardDescription>
             </CardHeader>
             <CardContent className="px-4 pb-4">
               {compactTable(
                 [
-                  { key: "ref", label: "Referência", className: "w-[48%]" },
+                  { key: "ref", label: "Produto", className: "w-[42%]" },
                   { key: "classe", label: "ABC", className: "w-[54px]", render: (v) => severityBadge(v, "red") },
-                  { key: "estoque", label: "Est.", className: "w-[54px]", render: (v) => <span className="font-semibold text-[#ff8a66]">{number(v)}</span> },
+                  { key: "qtdVendida", label: "Vendas", className: "w-[64px]", render: (v) => number(v) },
+                  { key: "estoque", label: "Est.", className: "w-[58px]", render: (v) => <span className="font-semibold text-[#ff9a78]">{number(v)}</span> },
                   { key: "receita", label: "Receita", render: (v) => currency(v) },
                 ],
                 riscoRuptura,
@@ -731,41 +790,45 @@ export default function DashboardLosNeto() {
             </CardContent>
           </Card>
 
-          <Card className="min-w-0 rounded-[10px] border-[#74572b] bg-[#252119]">
+          <Card className="min-w-0 rounded-[10px] border-[#8e2415] bg-[#301916]">
             <CardHeader className="px-4 pt-4">
-              <CardTitle className="text-base text-[#f2c36b]">Excesso de estoque</CardTitle>
+              <CardTitle className="text-base text-[#ff7a55]">Prioridade de reposição</CardTitle>
+              <CardDescription className="text-xs">Itens zerados com receita relevante.</CardDescription>
             </CardHeader>
             <CardContent className="px-4 pb-4">
               {compactTable(
                 [
-                  { key: "ref", label: "Referência", className: "w-[48%]" },
+                  { key: "ref", label: "Produto", className: "w-[42%]" },
+                  { key: "prioridade", label: "Prior.", className: "w-[72px]", render: (v) => severityBadge(v, "red") },
+                  { key: "estoque", label: "Est.", className: "w-[58px]", render: (v) => <span className="font-semibold text-[#ff7a55]">{number(v)}</span> },
+                  { key: "qtdVendida", label: "Vendas", className: "w-[64px]", render: (v) => number(v) },
+                  { key: "receita", label: "Receita", render: (v) => currency(v) },
+                ],
+                prioridadeReposicao,
+                "red",
+              )}
+            </CardContent>
+          </Card>
+
+          <Card className="min-w-0 rounded-[10px] border-[#74572b] bg-[#252119]">
+            <CardHeader className="px-4 pt-4">
+              <CardTitle className="text-base text-[#f2c36b]">Excesso de estoque</CardTitle>
+              <CardDescription className="text-xs">Alto saldo com baixa venda no período.</CardDescription>
+            </CardHeader>
+            <CardContent className="px-4 pb-4">
+              {compactTable(
+                [
+                  { key: "ref", label: "Produto", className: "w-[42%]" },
                   { key: "classe", label: "ABC", className: "w-[54px]", render: (v) => severityBadge(v, "amber") },
                   { key: "estoque", label: "Est.", className: "w-[64px]", render: (v) => <span className="font-semibold text-[#f2c36b]">{number(v)}</span> },
-                  { key: "qtdVendida", label: "Venda", className: "w-[54px]", render: (v) => number(v) },
+                  { key: "qtdVendida", label: "Venda", className: "w-[64px]", render: (v) => number(v) },
                 ],
                 excessoEstoque,
                 "amber",
               )}
             </CardContent>
           </Card>
-
-          <Card className="min-w-0 rounded-[10px] border-[#884027] bg-[#251d1a]">
-            <CardHeader className="px-4 pt-4">
-              <CardTitle className="text-base text-[#ff9a78]">Prioridade de reposição</CardTitle>
-            </CardHeader>
-            <CardContent className="px-4 pb-4">
-              {compactTable(
-                [
-                  { key: "ref", label: "Referência", className: "w-[48%]" },
-                  { key: "prioridade", label: "Prior.", className: "w-[72px]", render: (v) => severityBadge(v, "blue") },
-                  { key: "estoque", label: "Est.", className: "w-[54px]", render: (v) => <span className="font-semibold text-[#ff8a66]">{number(v)}</span> },
-                  { key: "receita", label: "Receita", render: (v) => currency(v) },
-                ],
-                prioridadeReposicao,
-                "blue",
-              )}
-            </CardContent>
-          </Card>
+          </div>
         </section>
 
         <section className="mt-3 grid gap-3 lg:grid-cols-4">
@@ -820,10 +883,7 @@ export function DashboardLosNetoPrint() {
         <div className="flex items-start justify-between gap-8">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Los Neto</p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight">Dashboard gerencial de vendas e estoque</h1>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-              Visão estática para impressão/PDF com foco em receita, curva ABC, ruptura, excesso e prioridade de reposição.
-            </p>
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight">Análise Vendas x Estoque</h1>
           </div>
           <div className="shrink-0 rounded-[8px] border border-slate-300 px-4 py-3 text-right">
             <p className="text-[10px] uppercase tracking-wide text-slate-500">Período</p>
@@ -832,7 +892,7 @@ export function DashboardLosNetoPrint() {
         </div>
       </section>
 
-      <section className="mt-5 grid grid-cols-4 gap-3">
+      <section className="mt-5 grid grid-cols-5 gap-3">
         {kpis.map((kpi) => (
           <div key={kpi.titulo} className="rounded-[8px] border border-slate-200 p-3">
             <p className="text-[10px] font-medium text-slate-500">{kpi.titulo}</p>
