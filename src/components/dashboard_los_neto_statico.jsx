@@ -258,7 +258,11 @@ const pieData = [
   { name: "Classe C", value: 2005 },
 ];
 
-const pieColors = ["#0f172a", "#475569", "#cbd5e1"];
+const brandRed = "#d63a17";
+const brandRedSoft = "#ef6a3a";
+const brandLine = "#3a3a3a";
+const brandMuted = "#a8a29e";
+const pieColors = [brandRed, "#6b6b6b", "#343434"];
 
 const currency = (v) =>
   new Intl.NumberFormat("pt-BR", {
@@ -273,7 +277,7 @@ const percent = (v) => `${new Intl.NumberFormat("pt-BR", { minimumFractionDigits
 const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 function Card({ className = "", children }) {
-  return <section className={cx("rounded-[10px] border border-slate-200 bg-white shadow-sm", className)}>{children}</section>;
+  return <section className={cx("rounded-[10px] border border-stone-800 bg-[#242424] shadow-[0_18px_45px_rgba(0,0,0,0.22)]", className)}>{children}</section>;
 }
 
 function CardHeader({ className = "", children }) {
@@ -285,11 +289,11 @@ function CardContent({ className = "", children }) {
 }
 
 function CardTitle({ className = "", children }) {
-  return <h3 className={cx("text-lg font-semibold tracking-tight text-slate-950", className)}>{children}</h3>;
+  return <h3 className={cx("text-lg font-semibold tracking-tight text-stone-100", className)}>{children}</h3>;
 }
 
 function CardDescription({ className = "", children }) {
-  return <p className={cx("mt-1 text-sm leading-6 text-slate-500", className)}>{children}</p>;
+  return <p className={cx("mt-1 text-sm leading-6 text-stone-400", className)}>{children}</p>;
 }
 
 function Badge({ className = "", children }) {
@@ -304,11 +308,12 @@ export default function DashboardLosNeto() {
   const chartTooltip = {
     contentStyle: {
       borderRadius: 8,
-      border: "1px solid #cbd5e1",
-      boxShadow: "0 10px 24px rgba(15, 23, 42, 0.14)",
+      border: "1px solid #4a2a22",
+      background: "#f7f3ee",
+      boxShadow: "0 14px 30px rgba(0, 0, 0, 0.24)",
       fontSize: 12,
     },
-    labelStyle: { color: "#0f172a", fontWeight: 700 },
+    labelStyle: { color: "#1c1c1c", fontWeight: 700 },
   };
 
   const totalRupturaReceita = riscoRuptura.reduce((total, item) => total + item.receita, 0);
@@ -335,21 +340,21 @@ export default function DashboardLosNeto() {
       value: `${riscoRuptura.length} refs.`,
       metric: currency(totalRupturaReceita),
       label: "receita sob risco",
-      className: "border-red-200 bg-red-50 text-red-800",
+      className: "border-[#7b2a1b] bg-[#331d18] text-[#ff8a66]",
     },
     {
       title: "Excesso",
       value: `${number(totalExcessoUnidades)} un.`,
       metric: `${excessoEstoque.length} refs.`,
       label: "baixo giro",
-      className: "border-amber-200 bg-amber-50 text-amber-800",
+      className: "border-[#7a5c2e] bg-[#332916] text-[#f2c36b]",
     },
     {
       title: "Reposição",
       value: `${prioridadeReposicao.length} itens`,
       metric: currency(totalReposicaoReceita),
       label: "priorizados",
-      className: "border-blue-200 bg-blue-50 text-blue-900",
+      className: "border-[#884027] bg-[#2f211d] text-[#ff9a78]",
     },
   ];
 
@@ -363,7 +368,7 @@ export default function DashboardLosNeto() {
   const TruncatedText = ({ value }) => (
     <span className="group relative block max-w-full" title={value}>
       <span className="block truncate">{value}</span>
-      <span className="pointer-events-none absolute left-0 top-full z-50 mt-1 hidden max-w-[360px] rounded-[8px] border border-slate-200 bg-white px-3 py-2 text-[11px] font-medium leading-4 text-slate-800 shadow-xl shadow-slate-950/10 group-hover:block">
+      <span className="pointer-events-none absolute left-0 top-full z-50 mt-1 hidden max-w-[360px] rounded-[8px] border border-[#4a2a22] bg-[#f7f3ee] px-3 py-2 text-[11px] font-medium leading-4 text-[#1c1c1c] shadow-xl shadow-black/20 group-hover:block">
         {value}
       </span>
     </span>
@@ -374,15 +379,15 @@ export default function DashboardLosNeto() {
 
     const item = payload[0].payload;
     return (
-      <div className="max-w-[280px] rounded-[8px] border border-slate-200 bg-white p-3 text-xs shadow-xl shadow-slate-950/10">
-        <p className="font-semibold leading-5 text-slate-950">{item.ref}</p>
-        <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-slate-600">
+      <div className="max-w-[280px] rounded-[8px] border border-[#4a2a22] bg-[#f7f3ee] p-3 text-xs shadow-xl shadow-black/20">
+        <p className="font-semibold leading-5 text-[#1c1c1c]">{item.ref}</p>
+        <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-stone-600">
           <span>Vendido</span>
-          <span className="text-right font-semibold text-slate-900">{number(item.venda)} un.</span>
+          <span className="text-right font-semibold text-[#1c1c1c]">{number(item.venda)} un.</span>
           <span>Estoque</span>
-          <span className="text-right font-semibold text-slate-900">{number(item.estoque)} un.</span>
+          <span className="text-right font-semibold text-[#1c1c1c]">{number(item.estoque)} un.</span>
           <span>Receita</span>
-          <span className="text-right font-semibold text-slate-900">{currency(item.receita)}</span>
+          <span className="text-right font-semibold text-[#1c1c1c]">{currency(item.receita)}</span>
         </div>
       </div>
     );
@@ -393,20 +398,20 @@ export default function DashboardLosNeto() {
 
     const venda = payload[0].value;
     return (
-      <div className="rounded-[8px] border border-slate-200 bg-white p-3 text-xs shadow-xl shadow-slate-950/10">
-        <p className="font-semibold text-slate-950">Numeração {label}</p>
-        <div className="mt-2 flex items-center justify-between gap-8 text-slate-600">
+      <div className="rounded-[8px] border border-[#4a2a22] bg-[#f7f3ee] p-3 text-xs shadow-xl shadow-black/20">
+        <p className="font-semibold text-[#1c1c1c]">Numeração {label}</p>
+        <div className="mt-2 flex items-center justify-between gap-8 text-stone-600">
           <span>Quantidade vendida</span>
-          <span className="font-semibold text-slate-900">{number(venda)} un.</span>
+          <span className="font-semibold text-[#1c1c1c]">{number(venda)} un.</span>
         </div>
       </div>
     );
   };
 
   const compactTable = (columns, data, tone = "slate") => (
-    <div className="min-w-0 overflow-visible rounded-[8px] border border-slate-200">
+    <div className="min-w-0 overflow-visible rounded-[8px] border border-stone-800">
       <table className="w-full table-fixed text-[12px]">
-        <thead className="bg-slate-100 text-[10px] uppercase tracking-wide text-slate-600">
+        <thead className="bg-[#1b1b1b] text-[10px] uppercase tracking-wide text-stone-400">
           <tr>
             {columns.map((column) => (
               <th key={column.key} className={cx("px-3 py-2 text-left font-semibold", column.className)}>
@@ -415,11 +420,11 @@ export default function DashboardLosNeto() {
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100 bg-white">
+        <tbody className="divide-y divide-stone-800 bg-[#242424]">
           {data.map((row, index) => (
-            <tr key={`${row.ref || row.nome || row.classe || index}`} className="hover:bg-slate-50">
+            <tr key={`${row.ref || row.nome || row.classe || index}`} className="hover:bg-[#2d2d2d]">
               {columns.map((column) => (
-                <td key={column.key} className={cx("px-3 py-2 align-middle text-slate-700", column.className)}>
+                <td key={column.key} className={cx("px-3 py-2 align-middle text-stone-300", column.className)}>
                   {column.render
                     ? column.render(row[column.key], row, tone)
                     : typeof row[column.key] === "string" && (column.key === "ref" || column.key === "nome" || column.truncate)
@@ -436,10 +441,10 @@ export default function DashboardLosNeto() {
 
   const severityBadge = (value, tone = "slate") => {
     const styles = {
-      red: "bg-red-100 text-red-800 ring-red-200",
-      amber: "bg-amber-100 text-amber-800 ring-amber-200",
-      blue: "bg-blue-100 text-blue-900 ring-blue-200",
-      slate: "bg-slate-100 text-slate-700 ring-slate-200",
+      red: "bg-[#3a1b16] text-[#ff8a66] ring-[#79301f]",
+      amber: "bg-[#332916] text-[#f2c36b] ring-[#74572b]",
+      blue: "bg-[#2f211d] text-[#ff9a78] ring-[#884027]",
+      slate: "bg-stone-800 text-stone-300 ring-stone-700",
     };
 
     return <span className={cx("inline-flex rounded px-2 py-0.5 text-[11px] font-semibold ring-1", styles[tone])}>{value}</span>;
@@ -448,9 +453,9 @@ export default function DashboardLosNeto() {
   const rankingChart = (data, color) => (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={data} layout="vertical" margin={{ top: 4, right: 8, bottom: 0, left: 0 }}>
-        <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" horizontal={false} />
-        <XAxis type="number" tick={{ fill: "#64748b", fontSize: 10 }} tickFormatter={(value) => `${Math.round(value / 1000)}k`} axisLine={false} tickLine={false} />
-        <YAxis dataKey="nome" type="category" width={86} tick={{ fill: "#334155", fontSize: 10 }} axisLine={false} tickLine={false} />
+        <CartesianGrid stroke={brandLine} strokeDasharray="3 3" horizontal={false} />
+        <XAxis type="number" tick={{ fill: brandMuted, fontSize: 10 }} tickFormatter={(value) => `${Math.round(value / 1000)}k`} axisLine={false} tickLine={false} />
+        <YAxis dataKey="nome" type="category" width={86} tick={{ fill: "#d6d3d1", fontSize: 10 }} axisLine={false} tickLine={false} />
         <Tooltip {...chartTooltip} formatter={(value) => currency(value)} />
         <Bar dataKey="receita" fill={color} radius={[0, 4, 4, 0]} barSize={16} />
       </BarChart>
@@ -465,9 +470,9 @@ export default function DashboardLosNeto() {
             <CardTitle className="text-base">{title}</CardTitle>
             <CardDescription className="text-xs">{description}</CardDescription>
           </div>
-          <div className="shrink-0 rounded-[8px] border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-right">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">Total</p>
-            <p className="text-xs font-semibold text-slate-900">{number(totalItems)} itens</p>
+          <div className="shrink-0 rounded-[8px] border border-[#4a2a22] bg-[#1b1b1b] px-2.5 py-1.5 text-right">
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-stone-500">Total</p>
+            <p className="text-xs font-semibold text-stone-100">{number(totalItems)} itens</p>
           </div>
         </div>
       </CardHeader>
@@ -479,7 +484,7 @@ export default function DashboardLosNeto() {
               <PieChart margin={{ top: 2, right: 2, bottom: 2, left: 2 }}>
                 <Pie data={chartData} dataKey="value" nameKey="name" innerRadius={46} outerRadius={66} paddingAngle={3}>
                   {chartData.map((entry, index) => (
-                    <Cell key={entry.name} fill={["#12355b", "#64748b", "#d6dde8"][index]} />
+                    <Cell key={entry.name} fill={pieColors[index]} />
                   ))}
                 </Pie>
                 <Tooltip
@@ -489,15 +494,15 @@ export default function DashboardLosNeto() {
               </PieChart>
             </ResponsiveContainer>
             </div>
-            <div className="mt-1 grid grid-cols-3 gap-1 text-center text-[10px] font-semibold text-slate-500">
+            <div className="mt-1 grid grid-cols-3 gap-1 text-center text-[10px] font-semibold text-stone-500">
               <span>A</span>
               <span>B</span>
               <span>C</span>
             </div>
           </div>
-          <div className="min-w-0 overflow-hidden rounded-[8px] border border-slate-200">
+          <div className="min-w-0 overflow-hidden rounded-[8px] border border-stone-800">
             <table className="w-full table-fixed text-[12px]">
-              <thead className="bg-slate-100 text-[10px] uppercase tracking-wide text-slate-600">
+              <thead className="bg-[#1b1b1b] text-[10px] uppercase tracking-wide text-stone-400">
                 <tr>
                   <th className="w-[64px] px-2 py-2 text-left font-semibold">Classe</th>
                   <th className="w-[68px] px-2 py-2 text-right font-semibold">% valor</th>
@@ -506,23 +511,23 @@ export default function DashboardLosNeto() {
                   <th className="px-2 py-2 text-right font-semibold">Receita</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 bg-white">
+              <tbody className="divide-y divide-stone-800 bg-[#242424]">
                 {tableData.map((row) => {
                   const isA = row.classe === "A";
                   return (
-                    <tr key={row.classe} className={isA ? "bg-blue-50/60" : "hover:bg-slate-50"}>
+                    <tr key={row.classe} className={isA ? "bg-[#331d18]" : "hover:bg-[#2d2d2d]"}>
                       <td className="px-2 py-2">
                         <span className={cx(
                           "inline-flex rounded px-2 py-0.5 text-[11px] font-semibold ring-1",
-                          isA ? "bg-blue-100 text-blue-900 ring-blue-200" : "bg-slate-100 text-slate-700 ring-slate-200",
+                          isA ? "bg-[#d63a17] text-white ring-[#ef6a3a]" : "bg-stone-800 text-stone-300 ring-stone-700",
                         )}>
                           {row.classe}
                         </span>
                       </td>
-                      <td className={cx("px-2 py-2 text-right tabular-nums", isA ? "font-semibold text-blue-950" : "text-slate-700")}>{percent(row.pctValor)}</td>
-                      <td className={cx("px-2 py-2 text-right tabular-nums", isA ? "font-semibold text-blue-950" : "text-slate-700")}>{percent(row.pctItens)}</td>
-                      <td className="px-2 py-2 text-right tabular-nums text-slate-700">{number(row[quantityKey])}</td>
-                      <td className="px-2 py-2 text-right tabular-nums font-medium text-slate-900">{currency(row.receita)}</td>
+                      <td className={cx("px-2 py-2 text-right tabular-nums", isA ? "font-semibold text-[#ff9a78]" : "text-stone-300")}>{percent(row.pctValor)}</td>
+                      <td className={cx("px-2 py-2 text-right tabular-nums", isA ? "font-semibold text-[#ff9a78]" : "text-stone-300")}>{percent(row.pctItens)}</td>
+                      <td className="px-2 py-2 text-right tabular-nums text-stone-300">{number(row[quantityKey])}</td>
+                      <td className="px-2 py-2 text-right tabular-nums font-medium text-stone-100">{currency(row.receita)}</td>
                     </tr>
                   );
                 })}
@@ -535,17 +540,17 @@ export default function DashboardLosNeto() {
   );
 
   return (
-    <main className="min-h-screen bg-slate-100 text-slate-950">
+    <main className="min-h-screen bg-[#1c1c1c] text-stone-100">
       <div className="mx-auto max-w-[1360px] px-3 py-3 sm:px-4 lg:px-5">
-        <header className="mb-3 rounded-[10px] border border-slate-200 bg-white px-4 py-3 shadow-sm">
+        <header className="mb-3 rounded-[10px] border border-[#3a211c] bg-[#202020] px-4 py-3 shadow-[0_18px_45px_rgba(0,0,0,0.22)]">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded bg-slate-900 px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">Los Neto</span>
-                <span className="rounded border border-slate-300 px-2 py-1 text-[11px] font-semibold text-slate-600">Jan/25 a Mar/26</span>
-                <span className="rounded border border-slate-300 px-2 py-1 text-[11px] font-semibold text-slate-600">Dashboard estático</span>
+                <span className="rounded bg-[#d63a17] px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_0_18px_rgba(214,58,23,0.22)]">Los Neto</span>
+                <span className="rounded border border-stone-700 bg-[#171717] px-2 py-1 text-[11px] font-semibold text-stone-300">Jan/25 a Mar/26</span>
+                <span className="rounded border border-stone-700 bg-[#171717] px-2 py-1 text-[11px] font-semibold text-stone-300">Dashboard estático</span>
               </div>
-              <h1 className="mt-2 text-xl font-semibold tracking-tight text-slate-950 sm:text-2xl">
+              <h1 className="mt-2 text-xl font-semibold tracking-tight text-stone-100 sm:text-2xl">
                 Painel executivo de vendas, estoque e reposição
               </h1>
             </div>
@@ -553,7 +558,7 @@ export default function DashboardLosNeto() {
               {decisionCards.map((card) => (
                 <div key={card.title} className={cx("rounded-[8px] border px-3 py-2", card.className)}>
                   <p className="text-[10px] font-semibold uppercase tracking-wide">{card.title}</p>
-                  <p className="mt-1 text-lg font-semibold leading-none text-slate-950">{card.value}</p>
+                  <p className="mt-1 text-lg font-semibold leading-none text-stone-100">{card.value}</p>
                   <p className="mt-1 truncate text-[11px] font-medium">{card.metric} · {card.label}</p>
                 </div>
               ))}
@@ -565,15 +570,15 @@ export default function DashboardLosNeto() {
           {kpis.map((kpi) => {
             const Icon = kpi.icon;
             return (
-              <Card key={kpi.titulo} className="rounded-[10px] border-slate-200 bg-white">
+              <Card key={kpi.titulo} className="rounded-[10px] border-stone-800 bg-[#242424]">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-slate-500">{kpi.titulo}</p>
-                      <p className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">{kpi.valor}</p>
-                      <p className="mt-1 truncate text-xs text-slate-500">{kpi.detalhe}</p>
+                      <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-stone-400">{kpi.titulo}</p>
+                      <p className="mt-2 text-2xl font-semibold tracking-tight text-stone-100">{kpi.valor}</p>
+                      <p className="mt-1 truncate text-xs text-stone-500">{kpi.detalhe}</p>
                     </div>
-                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[8px] bg-slate-100 text-slate-700">
+                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[8px] bg-[#331d18] text-[#ff7148]">
                       <Icon className="h-4 w-4" />
                     </span>
                   </div>
@@ -592,11 +597,11 @@ export default function DashboardLosNeto() {
             <CardContent className="h-[260px] px-3 pb-3">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={receitaMensal} margin={{ top: 10, right: 10, bottom: 0, left: 0 }}>
-                  <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="mes" tick={{ fill: "#64748b", fontSize: 10 }} interval={1} height={28} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fill: "#64748b", fontSize: 10 }} tickFormatter={(value) => `${Math.round(value / 1000)}k`} width={36} axisLine={false} tickLine={false} />
+                  <CartesianGrid stroke={brandLine} strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="mes" tick={{ fill: brandMuted, fontSize: 10 }} interval={1} height={28} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fill: brandMuted, fontSize: 10 }} tickFormatter={(value) => `${Math.round(value / 1000)}k`} width={36} axisLine={false} tickLine={false} />
                   <Tooltip {...chartTooltip} formatter={(value) => currency(value)} />
-                  <Line type="monotone" dataKey="receita" stroke="#12355b" strokeWidth={2.5} dot={false} activeDot={{ r: 4 }} />
+                  <Line type="monotone" dataKey="receita" stroke={brandRed} strokeWidth={2.5} dot={false} activeDot={{ r: 4, fill: brandRedSoft }} />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
@@ -610,11 +615,11 @@ export default function DashboardLosNeto() {
             <CardContent className="h-[260px] px-3 pb-3">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={qtdMensal} margin={{ top: 10, right: 4, bottom: 0, left: -8 }}>
-                  <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="mes" tick={{ fill: "#64748b", fontSize: 10 }} interval={2} height={28} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fill: "#64748b", fontSize: 10 }} tickFormatter={(value) => `${Math.round(value / 1000)}k`} width={34} axisLine={false} tickLine={false} />
+                  <CartesianGrid stroke={brandLine} strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="mes" tick={{ fill: brandMuted, fontSize: 10 }} interval={2} height={28} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fill: brandMuted, fontSize: 10 }} tickFormatter={(value) => `${Math.round(value / 1000)}k`} width={34} axisLine={false} tickLine={false} />
                   <Tooltip {...chartTooltip} formatter={(value) => `${number(value)} un.`} />
-                  <Bar dataKey="qtd" fill="#64748b" radius={[4, 4, 0, 0]} barSize={12} />
+                  <Bar dataKey="qtd" fill={brandRed} radius={[4, 4, 0, 0]} barSize={12} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -645,10 +650,10 @@ export default function DashboardLosNeto() {
 
         <section className="mt-3 grid gap-3 xl:grid-cols-[1fr_1fr_1fr_1fr]">
           {[
-            { title: "Produtos", data: topProdutos, color: "#12355b" },
-            { title: "Referências", data: topReferencias, color: "#1f4e79" },
-            { title: "Marcas", data: topMarcas, color: "#475569" },
-            { title: "Numerações", data: topNumeracoes, color: "#64748b" },
+            { title: "Produtos", data: topProdutos, color: brandRed },
+            { title: "Referências", data: topReferencias, color: "#b74127" },
+            { title: "Marcas", data: topMarcas, color: "#7a7a7a" },
+            { title: "Numerações", data: topNumeracoes, color: "#5f5f5f" },
           ].map((item) => (
             <Card key={item.title} className="min-w-0 rounded-[10px]">
               <CardHeader className="px-4 pt-4">
@@ -668,15 +673,15 @@ export default function DashboardLosNeto() {
             <CardContent className="h-[260px] px-3 pb-3">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={vendasPorNumeracao} margin={{ top: 10, right: 4, bottom: 0, left: -4 }}>
-                  <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="numeracao" tick={{ fill: "#64748b", fontSize: 10 }} interval={0} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fill: "#64748b", fontSize: 10 }} tickFormatter={(value) => `${Math.round(value / 1000)}k`} width={34} axisLine={false} tickLine={false} />
-                  <Tooltip content={<NumeracaoTooltip />} cursor={{ fill: "rgba(15, 23, 42, 0.04)" }} />
+                  <CartesianGrid stroke={brandLine} strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="numeracao" tick={{ fill: brandMuted, fontSize: 10 }} interval={0} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fill: brandMuted, fontSize: 10 }} tickFormatter={(value) => `${Math.round(value / 1000)}k`} width={34} axisLine={false} tickLine={false} />
+                  <Tooltip content={<NumeracaoTooltip />} cursor={{ fill: "rgba(214, 58, 23, 0.08)" }} />
                   <Bar dataKey="venda" name="Vendas" radius={[4, 4, 0, 0]} barSize={10}>
                     {vendasPorNumeracao.map((entry) => (
                       <Cell
                         key={entry.numeracao}
-                        fill={entry.venda >= 3000 ? "#12355b" : entry.venda >= 2000 ? "#476987" : "#9aa8b8"}
+                        fill={entry.venda >= 3000 ? brandRed : entry.venda >= 2000 ? "#a9462d" : "#6b6b6b"}
                       />
                     ))}
                   </Bar>
@@ -694,12 +699,12 @@ export default function DashboardLosNeto() {
               <div className="h-full min-w-0 overflow-hidden">
                 <ResponsiveContainer width="100%" height="100%">
                   <ScatterChart margin={{ top: 10, right: 8, bottom: 4, left: -8 }}>
-                    <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" />
-                    <XAxis type="number" dataKey="venda" name="Venda" tick={{ fill: "#64748b", fontSize: 10 }} width={30} axisLine={false} tickLine={false} />
-                    <YAxis type="number" dataKey="estoque" name="Estoque" tick={{ fill: "#64748b", fontSize: 10 }} width={30} axisLine={false} tickLine={false} />
+                    <CartesianGrid stroke={brandLine} strokeDasharray="3 3" />
+                    <XAxis type="number" dataKey="venda" name="Venda" tick={{ fill: brandMuted, fontSize: 10 }} width={30} axisLine={false} tickLine={false} />
+                    <YAxis type="number" dataKey="estoque" name="Estoque" tick={{ fill: brandMuted, fontSize: 10 }} width={30} axisLine={false} tickLine={false} />
                     <ZAxis type="number" dataKey="receita" range={[60, 260]} />
                     <Tooltip content={<ScatterTooltip />} cursor={{ strokeDasharray: "3 3" }} />
-                    <Scatter data={scatterData} name="Referências" fill="#12355b" />
+                    <Scatter data={scatterData} name="Referências" fill={brandRed} />
                   </ScatterChart>
                 </ResponsiveContainer>
               </div>
@@ -708,16 +713,16 @@ export default function DashboardLosNeto() {
         </section>
 
         <section className="mt-3 grid gap-3 xl:grid-cols-3">
-          <Card className="min-w-0 rounded-[10px] border-red-200">
+          <Card className="min-w-0 rounded-[10px] border-[#79301f] bg-[#251d1a]">
             <CardHeader className="px-4 pt-4">
-              <CardTitle className="text-base text-red-900">Risco de ruptura</CardTitle>
+              <CardTitle className="text-base text-[#ff8a66]">Risco de ruptura</CardTitle>
             </CardHeader>
             <CardContent className="px-4 pb-4">
               {compactTable(
                 [
                   { key: "ref", label: "Referência", className: "w-[48%]" },
                   { key: "classe", label: "ABC", className: "w-[54px]", render: (v) => severityBadge(v, "red") },
-                  { key: "estoque", label: "Est.", className: "w-[54px]", render: (v) => <span className="font-semibold text-red-700">{number(v)}</span> },
+                  { key: "estoque", label: "Est.", className: "w-[54px]", render: (v) => <span className="font-semibold text-[#ff8a66]">{number(v)}</span> },
                   { key: "receita", label: "Receita", render: (v) => currency(v) },
                 ],
                 riscoRuptura,
@@ -726,16 +731,16 @@ export default function DashboardLosNeto() {
             </CardContent>
           </Card>
 
-          <Card className="min-w-0 rounded-[10px] border-amber-200">
+          <Card className="min-w-0 rounded-[10px] border-[#74572b] bg-[#252119]">
             <CardHeader className="px-4 pt-4">
-              <CardTitle className="text-base text-amber-900">Excesso de estoque</CardTitle>
+              <CardTitle className="text-base text-[#f2c36b]">Excesso de estoque</CardTitle>
             </CardHeader>
             <CardContent className="px-4 pb-4">
               {compactTable(
                 [
                   { key: "ref", label: "Referência", className: "w-[48%]" },
                   { key: "classe", label: "ABC", className: "w-[54px]", render: (v) => severityBadge(v, "amber") },
-                  { key: "estoque", label: "Est.", className: "w-[64px]", render: (v) => <span className="font-semibold text-amber-700">{number(v)}</span> },
+                  { key: "estoque", label: "Est.", className: "w-[64px]", render: (v) => <span className="font-semibold text-[#f2c36b]">{number(v)}</span> },
                   { key: "qtdVendida", label: "Venda", className: "w-[54px]", render: (v) => number(v) },
                 ],
                 excessoEstoque,
@@ -744,16 +749,16 @@ export default function DashboardLosNeto() {
             </CardContent>
           </Card>
 
-          <Card className="min-w-0 rounded-[10px] border-blue-200">
+          <Card className="min-w-0 rounded-[10px] border-[#884027] bg-[#251d1a]">
             <CardHeader className="px-4 pt-4">
-              <CardTitle className="text-base text-blue-950">Prioridade de reposição</CardTitle>
+              <CardTitle className="text-base text-[#ff9a78]">Prioridade de reposição</CardTitle>
             </CardHeader>
             <CardContent className="px-4 pb-4">
               {compactTable(
                 [
                   { key: "ref", label: "Referência", className: "w-[48%]" },
                   { key: "prioridade", label: "Prior.", className: "w-[72px]", render: (v) => severityBadge(v, "blue") },
-                  { key: "estoque", label: "Est.", className: "w-[54px]", render: (v) => <span className="font-semibold text-red-700">{number(v)}</span> },
+                  { key: "estoque", label: "Est.", className: "w-[54px]", render: (v) => <span className="font-semibold text-[#ff8a66]">{number(v)}</span> },
                   { key: "receita", label: "Receita", render: (v) => currency(v) },
                 ],
                 prioridadeReposicao,
@@ -767,8 +772,8 @@ export default function DashboardLosNeto() {
           {executiveInsights.map((item) => (
             <Card key={item.title} className="rounded-[10px]">
               <CardContent className="p-4">
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">{item.title}</p>
-                <p className="mt-2 text-sm leading-5 text-slate-700">{item.text}</p>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-[#ff7148]">{item.title}</p>
+                <p className="mt-2 text-sm leading-5 text-stone-300">{item.text}</p>
               </CardContent>
             </Card>
           ))}
