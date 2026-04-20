@@ -26,12 +26,20 @@ button {
 }
 
 .screen-print-preview {
-  padding: 24px 12px 48px;
+  padding: 16px 10px 40px;
   background: #1c1c1c;
+  overflow-x: hidden;
 }
 
 .screen-print-preview > main {
+  width: 100%;
   box-shadow: 0 24px 70px rgba(15, 23, 42, 0.14);
+}
+
+@media (min-width: 640px) {
+  .screen-print-preview {
+    padding: 24px 12px 48px;
+  }
 }
 
 @page {

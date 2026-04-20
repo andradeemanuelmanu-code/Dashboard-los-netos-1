@@ -431,7 +431,7 @@ export default function DashboardLosNeto() {
 
   const compactTable = (columns, data, tone = "slate") => (
     <div className="min-w-0 overflow-x-auto rounded-[8px] border border-stone-800">
-      <table className="min-w-[560px] table-fixed text-[12px] sm:w-full sm:min-w-0">
+      <table className="min-w-[540px] table-fixed text-[11px] sm:w-full sm:min-w-0 sm:text-[12px]">
         <thead className="bg-[#1b1b1b] text-[10px] uppercase tracking-wide text-stone-400">
           <tr>
             {columns.map((column) => (
@@ -485,22 +485,22 @@ export default function DashboardLosNeto() {
 
   const abcCard = ({ title, description, chartData, tableData, quantityKey, quantityLabel, totalItems }) => (
     <Card className="min-w-0 rounded-[10px]">
-      <CardHeader className="px-4 pt-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
+      <CardHeader className="px-3 pt-4 sm:px-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0">
             <CardTitle className="text-base">{title}</CardTitle>
             <CardDescription className="text-xs">{description}</CardDescription>
           </div>
-          <div className="shrink-0 rounded-[8px] border border-[#4a2a22] bg-[#1b1b1b] px-2.5 py-1.5 text-right">
+          <div className="w-full rounded-[8px] border border-[#4a2a22] bg-[#1b1b1b] px-2.5 py-1.5 text-left sm:w-auto sm:shrink-0 sm:text-right">
             <p className="text-[10px] font-semibold uppercase tracking-wide text-stone-500">Total</p>
             <p className="text-xs font-semibold text-stone-100">{number(totalItems)} itens</p>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="px-4 pb-4">
-        <div className="grid min-h-[236px] gap-4 xl:grid-cols-[0.72fr_1.28fr]">
-          <div className="flex min-w-0 flex-col justify-center">
-            <div className="h-[168px] min-w-0">
+      <CardContent className="px-3 pb-4 sm:px-4">
+        <div className="grid gap-4 xl:grid-cols-[0.72fr_1.28fr]">
+          <div className="flex min-w-0 flex-col items-center justify-center">
+            <div className="h-[156px] w-full min-w-0 max-w-[240px] sm:h-[168px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart margin={{ top: 2, right: 2, bottom: 2, left: 2 }}>
                 <Pie data={chartData} dataKey="value" nameKey="name" innerRadius={46} outerRadius={66} paddingAngle={3}>
@@ -521,8 +521,8 @@ export default function DashboardLosNeto() {
               <span>C</span>
             </div>
           </div>
-          <div className="min-w-0 overflow-hidden rounded-[8px] border border-stone-800">
-            <table className="w-full table-fixed text-[12px]">
+          <div className="min-w-0 overflow-x-auto rounded-[8px] border border-stone-800">
+            <table className="min-w-[540px] table-fixed text-[11px] sm:w-full sm:min-w-0 sm:text-[12px]">
               <thead className="bg-[#1b1b1b] text-[10px] uppercase tracking-wide text-stone-400">
                 <tr>
                   <th className="w-[64px] px-2 py-2 text-left font-semibold">Classe</th>
@@ -619,7 +619,7 @@ export default function DashboardLosNeto() {
           />
           <div className="grid gap-3 xl:grid-cols-[1.35fr_0.8fr]">
           <Card className="min-w-0 rounded-[10px]">
-            <CardHeader className="px-4 pt-4">
+            <CardHeader className="px-3 pt-4 sm:px-4">
               <CardTitle className="text-base">Receita mensal</CardTitle>
               <CardDescription className="text-xs">Evolução do faturamento bruto.</CardDescription>
             </CardHeader>
@@ -775,7 +775,7 @@ export default function DashboardLosNeto() {
               <CardTitle className="text-base text-[#ff9a78]">Risco de ruptura</CardTitle>
               <CardDescription className="text-xs">Itens Classe A com venda e baixa cobertura.</CardDescription>
             </CardHeader>
-            <CardContent className="px-4 pb-4">
+            <CardContent className="px-3 pb-4 sm:px-4">
               {compactTable(
                 [
                   { key: "ref", label: "Produto", className: "w-[42%]" },
@@ -791,11 +791,11 @@ export default function DashboardLosNeto() {
           </Card>
 
           <Card className="min-w-0 rounded-[10px] border-[#8e2415] bg-[#301916]">
-            <CardHeader className="px-4 pt-4">
+            <CardHeader className="px-3 pt-4 sm:px-4">
               <CardTitle className="text-base text-[#ff7a55]">Prioridade de reposição</CardTitle>
               <CardDescription className="text-xs">Itens zerados com receita relevante.</CardDescription>
             </CardHeader>
-            <CardContent className="px-4 pb-4">
+            <CardContent className="px-3 pb-4 sm:px-4">
               {compactTable(
                 [
                   { key: "ref", label: "Produto", className: "w-[42%]" },
@@ -811,11 +811,11 @@ export default function DashboardLosNeto() {
           </Card>
 
           <Card className="min-w-0 rounded-[10px] border-[#74572b] bg-[#252119]">
-            <CardHeader className="px-4 pt-4">
+            <CardHeader className="px-3 pt-4 sm:px-4">
               <CardTitle className="text-base text-[#f2c36b]">Excesso de estoque</CardTitle>
               <CardDescription className="text-xs">Alto saldo com baixa venda no período.</CardDescription>
             </CardHeader>
-            <CardContent className="px-4 pb-4">
+            <CardContent className="px-3 pb-4 sm:px-4">
               {compactTable(
                 [
                   { key: "ref", label: "Produto", className: "w-[42%]" },
@@ -853,46 +853,48 @@ export function DashboardLosNetoPrint() {
   const maiorReceita = Math.max(...receitaMensal.map((item) => item.receita));
 
   const printTable = (columns, data) => (
-    <table className="w-full border-collapse text-[10px]">
-      <thead>
-        <tr className="border-b border-slate-300 bg-slate-100 text-left text-[9px] uppercase tracking-wide text-slate-600">
-          {columns.map((column) => (
-            <th key={column.key} className="px-2 py-2 font-semibold">
-              {column.label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((row, index) => (
-          <tr key={`${row.ref || row.classe || row.nome || index}`} className="border-b border-slate-200">
+    <div className="w-full overflow-x-auto">
+      <table className="min-w-[520px] border-collapse text-[10px] sm:w-full sm:min-w-0">
+        <thead>
+          <tr className="border-b border-slate-300 bg-slate-100 text-left text-[9px] uppercase tracking-wide text-slate-600">
             {columns.map((column) => (
-              <td key={column.key} className="px-2 py-2 align-top text-slate-700">
-                {column.render ? column.render(row[column.key], row) : row[column.key]}
-              </td>
+              <th key={column.key} className="px-2 py-2 font-semibold">
+                {column.label}
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {data.map((row, index) => (
+            <tr key={`${row.ref || row.classe || row.nome || index}`} className="border-b border-slate-200">
+              {columns.map((column) => (
+                <td key={column.key} className="px-2 py-2 align-top text-slate-700">
+                  {column.render ? column.render(row[column.key], row) : row[column.key]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 
   return (
-    <main className="mx-auto min-h-screen max-w-[920px] bg-white p-8 text-slate-950 print:max-w-none print:p-0">
+    <main className="mx-auto min-h-screen w-full max-w-[920px] overflow-hidden bg-white p-4 text-slate-950 sm:p-8 print:max-w-none print:p-0">
       <section className="border-b-4 border-slate-950 pb-5">
-        <div className="flex items-start justify-between gap-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Los Neto</p>
             <h1 className="mt-2 text-3xl font-semibold tracking-tight">Análise Vendas x Estoque</h1>
           </div>
-          <div className="shrink-0 rounded-[8px] border border-slate-300 px-4 py-3 text-right">
+          <div className="w-full rounded-[8px] border border-slate-300 px-4 py-3 text-left sm:w-auto sm:shrink-0 sm:text-right">
             <p className="text-[10px] uppercase tracking-wide text-slate-500">Período</p>
             <p className="text-sm font-semibold">Jan/25 a Mar/26</p>
           </div>
         </div>
       </section>
 
-      <section className="mt-5 grid grid-cols-5 gap-3">
+      <section className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
         {kpis.map((kpi) => (
           <div key={kpi.titulo} className="rounded-[8px] border border-slate-200 p-3">
             <p className="text-[10px] font-medium text-slate-500">{kpi.titulo}</p>
@@ -902,7 +904,7 @@ export function DashboardLosNetoPrint() {
         ))}
       </section>
 
-      <section className="mt-5 grid grid-cols-3 gap-3">
+      <section className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
         <div className="rounded-[8px] border border-red-200 bg-red-50 p-4">
           <p className="text-[10px] font-semibold uppercase tracking-wide text-red-700">Risco de ruptura</p>
           <p className="mt-2 text-2xl font-semibold">{riscoRuptura.length} refs.</p>
@@ -941,7 +943,7 @@ export function DashboardLosNetoPrint() {
         </div>
       </section>
 
-      <section className="mt-6 grid grid-cols-2 gap-4">
+      <section className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="rounded-[8px] border border-slate-200 p-4">
           <h2 className="text-base font-semibold">Top referências por receita</h2>
           <div className="mt-3">
