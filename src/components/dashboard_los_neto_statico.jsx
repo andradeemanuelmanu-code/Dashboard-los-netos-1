@@ -110,7 +110,7 @@ const kpis = [
   { titulo: "Receita total do período", valor: "R$ 6.468.994,19", detalhe: "Jan/25 a Mar/26", icon: TrendingUp },
   { titulo: "Quantidade vendida", valor: "38.824 un.", detalhe: "Volume total vendido", icon: ShoppingCart },
   { titulo: "Estoque atual", valor: "66.311 un.", detalhe: "Saldo físico consolidado", icon: Boxes },
-  { titulo: "Baixo giro em estoque", valor: "R$ 2.174.734,97", detalhe: "13.754 produtos/códigos com 1 a 10 vendas no período", icon: PackageSearch },
+  { titulo: "Baixo giro em estoque", valor: "R$ 2.092.077,27", detalhe: "13.767 códigos com vendas >=1 e <=10", icon: PackageSearch },
   { titulo: "Estoque sem saída", valor: "26.431 un.", detalhe: "11.733 produtos/códigos sem registro de saída", icon: PackageX },
 ];
 
@@ -320,7 +320,7 @@ function SectionTitle({ eyebrow, title, description }) {
         <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#e34a22]">{eyebrow}</p>
         <h2 className="text-base font-semibold tracking-tight text-stone-100 sm:text-lg">{title}</h2>
       </div>
-      {description ? <p className="max-w-xl text-xs leading-5 text-stone-500 sm:text-right">{description}</p> : null}
+      {description ? <p className="max-w-full text-xs leading-5 text-stone-500 sm:max-w-xl sm:text-right">{description}</p> : null}
     </div>
   );
 }
@@ -430,12 +430,12 @@ export default function DashboardLosNeto() {
   };
 
   const compactTable = (columns, data, tone = "slate") => (
-    <div className="min-w-0 overflow-x-auto rounded-[8px] border border-stone-800">
-      <table className="min-w-[540px] table-fixed text-[11px] md:w-full md:min-w-0 md:text-[12px]">
+    <div className="min-w-0 overflow-hidden rounded-[8px] border border-stone-800">
+      <table className="w-full table-fixed text-[11px]">
         <thead className="bg-[#1b1b1b] text-[10px] uppercase tracking-wide text-stone-400">
           <tr>
             {columns.map((column) => (
-              <th key={column.key} className={cx("px-3 py-2 text-left font-semibold", column.className)}>
+              <th key={column.key} className={cx("px-2 py-2 text-left font-semibold", column.className)}>
                 {column.label}
               </th>
             ))}
@@ -445,7 +445,7 @@ export default function DashboardLosNeto() {
           {data.map((row, index) => (
             <tr key={`${row.ref || row.nome || row.classe || index}`} className="hover:bg-[#2d2d2d]">
               {columns.map((column) => (
-                <td key={column.key} className={cx("px-3 py-2 align-middle text-stone-300", column.className)}>
+                <td key={column.key} className={cx("px-2 py-2 align-middle text-stone-300", column.className)}>
                   {column.render
                     ? column.render(row[column.key], row, tone)
                     : typeof row[column.key] === "string" && (column.key === "ref" || column.key === "nome" || column.truncate)
@@ -513,32 +513,123 @@ export default function DashboardLosNeto() {
         <XAxis type="number" tick={{ fill: brandMuted, fontSize: 10 }} tickFormatter={(value) => `${Math.round(value / 1000)}k`} axisLine={false} tickLine={false} />
         <YAxis dataKey="nome" type="category" width={86} tick={{ fill: "#d6d3d1", fontSize: 10 }} axisLine={false} tickLine={false} />
         <Tooltip {...chartTooltip} formatter={(value) => currency(value)} />
-        <Bar dataKey="receita" fill={color} radius={[0, 4, 4, 0]} barSize={16} />
+        <Bar dataKey="receita" fill={color} radius={[0, 4, 4, 0]} barSize={16} isAnimationActive={false} />
       </BarChart>
     </ResponsiveContainer>
   );
 
+  const abcSummaryTable = ({ tableData, quantityKey, quantityLabel, mobile = false }) => (
+    <div className="min-w-0 overflow-x-auto rounded-[10px] border border-stone-800">
+      <table className={cx("table-fixed", mobile ? "min-w-[500px] text-[11px]" : "w-full text-[12px]")}>
+        <thead className="bg-[#1b1b1b] text-[10px] uppercase tracking-wide text-stone-400">
+          <tr>
+            <th className="w-[64px] px-2 py-2 text-left font-semibold">Classe</th>
+            <th className="w-[68px] px-2 py-2 text-right font-semibold">% valor</th>
+            <th className="w-[68px] px-2 py-2 text-right font-semibold">% itens</th>
+            <th className="w-[76px] px-2 py-2 text-right font-semibold">{quantityLabel}</th>
+            <th className="px-2 py-2 text-right font-semibold">Receita</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-stone-800 bg-[#242424]">
+          {tableData.map((row) => {
+            const isA = row.classe === "A";
+            return (
+              <tr key={row.classe} className={isA ? "bg-[#331d18]" : "hover:bg-[#2d2d2d]"}>
+                <td className="px-2 py-2">
+                  <span className={cx(
+                    "inline-flex rounded px-2 py-0.5 text-[11px] font-semibold ring-1",
+                    isA ? "bg-[#d63a17] text-white ring-[#ef6a3a]" : "bg-stone-800 text-stone-300 ring-stone-700",
+                  )}>
+                    {row.classe}
+                  </span>
+                </td>
+                <td className={cx("px-2 py-2 text-right tabular-nums", isA ? "font-semibold text-[#ff9a78]" : "text-stone-300")}>{percent(row.pctValor)}</td>
+                <td className={cx("px-2 py-2 text-right tabular-nums", isA ? "font-semibold text-[#ff9a78]" : "text-stone-300")}>{percent(row.pctItens)}</td>
+                <td className="px-2 py-2 text-right tabular-nums text-stone-300">{number(row[quantityKey])}</td>
+                <td className="px-2 py-2 text-right tabular-nums font-medium text-stone-100">{currency(row.receita)}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  const abcMobileSummary = ({ tableData, quantityKey, quantityLabel }) => (
+    <div className="space-y-2">
+      {tableData.map((row) => {
+        const isA = row.classe === "A";
+
+        return (
+          <article
+            key={row.classe}
+            className={cx(
+              "rounded-[10px] border p-3",
+              isA ? "border-[#79301f] bg-[#331d18]" : "border-stone-800 bg-[#202020]",
+            )}
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className={cx(
+                  "inline-flex h-7 w-7 items-center justify-center rounded text-[12px] font-semibold ring-1",
+                  isA ? "bg-[#d63a17] text-white ring-[#ef6a3a]" : "bg-stone-800 text-stone-300 ring-stone-700",
+                )}>
+                  {row.classe}
+                </span>
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-stone-500">Classe</p>
+                  <p className={cx("text-xs font-semibold", isA ? "text-[#ff9a78]" : "text-stone-300")}>
+                    {isA ? "Maior impacto" : "Participação"}
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-stone-500">Receita</p>
+                <p className="text-xs font-semibold text-stone-100">{currency(row.receita)}</p>
+              </div>
+            </div>
+
+            <dl className="mt-3 grid grid-cols-3 gap-2 text-[11px]">
+              <div className="rounded-[8px] bg-black/18 px-2 py-1.5">
+                <dt className="text-stone-500">% valor</dt>
+                <dd className={cx("mt-0.5 font-semibold", isA ? "text-[#ff9a78]" : "text-stone-200")}>{percent(row.pctValor)}</dd>
+              </div>
+              <div className="rounded-[8px] bg-black/18 px-2 py-1.5">
+                <dt className="text-stone-500">% itens</dt>
+                <dd className="mt-0.5 font-semibold text-stone-200">{percent(row.pctItens)}</dd>
+              </div>
+              <div className="rounded-[8px] bg-black/18 px-2 py-1.5">
+                <dt className="text-stone-500">{quantityLabel}</dt>
+                <dd className="mt-0.5 font-semibold text-stone-200">{number(row[quantityKey])}</dd>
+              </div>
+            </dl>
+          </article>
+        );
+      })}
+    </div>
+  );
+
   const abcCard = ({ title, description, chartData, tableData, quantityKey, quantityLabel, totalItems }) => (
-    <Card className="min-w-0 rounded-[10px]">
+    <Card className="min-w-0 rounded-[12px]">
       <CardHeader className="px-4 pt-4 sm:px-5">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
           <div className="min-w-0">
             <CardTitle className="text-base">{title}</CardTitle>
             <CardDescription className="text-xs">{description}</CardDescription>
           </div>
-          <div className="w-full rounded-[10px] border border-[#4a2a22] bg-[#1b1b1b] px-3 py-2 text-left sm:w-auto sm:shrink-0 sm:text-right">
+          <div className="w-full rounded-[10px] border border-[#4a2a22] bg-[#1b1b1b] px-3 py-2 text-left md:w-auto md:shrink-0 md:text-right">
             <p className="text-[10px] font-semibold uppercase tracking-wide text-stone-500">Total</p>
             <p className="text-xs font-semibold text-stone-100">{number(totalItems)} itens</p>
           </div>
         </div>
       </CardHeader>
       <CardContent className="px-4 pb-4 sm:px-5">
-        <div className="grid gap-5 xl:grid-cols-[0.72fr_1.28fr]">
-          <div className="flex min-w-0 flex-col items-center justify-center">
-            <div className="h-[176px] w-full min-w-0 max-w-[260px] sm:h-[180px]">
+        <div className="md:hidden">
+          <div className="flex min-w-0 flex-col items-center rounded-[12px] border border-stone-800 bg-black/10 px-3 py-4">
+            <div className="h-[190px] w-full min-w-0 max-w-[280px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart margin={{ top: 2, right: 2, bottom: 2, left: 2 }}>
-                <Pie data={chartData} dataKey="value" nameKey="name" innerRadius={46} outerRadius={66} paddingAngle={3}>
+                <Pie data={chartData} dataKey="value" nameKey="name" innerRadius={52} outerRadius={76} paddingAngle={3} isAnimationActive={false}>
                   {chartData.map((entry, index) => (
                     <Cell key={entry.name} fill={pieColors[index]} />
                   ))}
@@ -550,46 +641,41 @@ export default function DashboardLosNeto() {
               </PieChart>
             </ResponsiveContainer>
             </div>
+            <div className="mt-2 grid w-full max-w-[260px] grid-cols-3 gap-2 text-center text-[10px] font-semibold text-stone-400">
+              <span className="rounded bg-[#331d18] px-2 py-1 text-[#ff9a78]">A</span>
+              <span className="rounded bg-stone-800 px-2 py-1">B</span>
+              <span className="rounded bg-stone-900 px-2 py-1">C</span>
+            </div>
+          </div>
+          <div className="mt-4">
+            {abcMobileSummary({ tableData, quantityKey, quantityLabel })}
+          </div>
+        </div>
+
+        <div className="hidden gap-5 md:grid xl:grid-cols-[0.72fr_1.28fr]">
+          <div className="flex min-w-0 flex-col items-center justify-center">
+            <div className="h-[180px] w-full min-w-0 max-w-[260px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart margin={{ top: 2, right: 2, bottom: 2, left: 2 }}>
+                  <Pie data={chartData} dataKey="value" nameKey="name" innerRadius={46} outerRadius={66} paddingAngle={3} isAnimationActive={false}>
+                    {chartData.map((entry, index) => (
+                      <Cell key={entry.name} fill={pieColors[index]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    {...chartTooltip}
+                    formatter={(value, name, props) => [percent(value), props.payload.name]}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
             <div className="mt-1 grid grid-cols-3 gap-1 text-center text-[10px] font-semibold text-stone-500">
               <span>A</span>
               <span>B</span>
               <span>C</span>
             </div>
           </div>
-          <div className="min-w-0 overflow-x-auto rounded-[10px] border border-stone-800">
-            <table className="min-w-[520px] table-fixed text-[11px] md:w-full md:min-w-0 md:text-[12px]">
-              <thead className="bg-[#1b1b1b] text-[10px] uppercase tracking-wide text-stone-400">
-                <tr>
-                  <th className="w-[64px] px-2 py-2 text-left font-semibold">Classe</th>
-                  <th className="w-[68px] px-2 py-2 text-right font-semibold">% valor</th>
-                  <th className="w-[68px] px-2 py-2 text-right font-semibold">% itens</th>
-                  <th className="w-[76px] px-2 py-2 text-right font-semibold">{quantityLabel}</th>
-                  <th className="px-2 py-2 text-right font-semibold">Receita</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-stone-800 bg-[#242424]">
-                {tableData.map((row) => {
-                  const isA = row.classe === "A";
-                  return (
-                    <tr key={row.classe} className={isA ? "bg-[#331d18]" : "hover:bg-[#2d2d2d]"}>
-                      <td className="px-2 py-2">
-                        <span className={cx(
-                          "inline-flex rounded px-2 py-0.5 text-[11px] font-semibold ring-1",
-                          isA ? "bg-[#d63a17] text-white ring-[#ef6a3a]" : "bg-stone-800 text-stone-300 ring-stone-700",
-                        )}>
-                          {row.classe}
-                        </span>
-                      </td>
-                      <td className={cx("px-2 py-2 text-right tabular-nums", isA ? "font-semibold text-[#ff9a78]" : "text-stone-300")}>{percent(row.pctValor)}</td>
-                      <td className={cx("px-2 py-2 text-right tabular-nums", isA ? "font-semibold text-[#ff9a78]" : "text-stone-300")}>{percent(row.pctItens)}</td>
-                      <td className="px-2 py-2 text-right tabular-nums text-stone-300">{number(row[quantityKey])}</td>
-                      <td className="px-2 py-2 text-right tabular-nums font-medium text-stone-100">{currency(row.receita)}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+          {abcSummaryTable({ tableData, quantityKey, quantityLabel })}
         </div>
       </CardContent>
     </Card>
@@ -789,7 +875,7 @@ export default function DashboardLosNeto() {
                     <YAxis type="number" dataKey="estoque" name="Estoque" tick={{ fill: brandMuted, fontSize: 10 }} width={44} axisLine={false} tickLine={false} />
                     <ZAxis type="number" dataKey="receita" range={[60, 260]} />
                     <Tooltip content={<ScatterTooltip />} cursor={{ strokeDasharray: "3 3" }} />
-                    <Scatter data={scatterData} name="Referências" fill={brandRed} />
+                    <Scatter data={scatterData} name="Referências" fill={brandRed} isAnimationActive={false} />
                   </ScatterChart>
                 </ResponsiveContainer>
               </div>
@@ -815,10 +901,10 @@ export default function DashboardLosNeto() {
               <div className="hidden md:block">
               {compactTable(
                 [
-                  { key: "ref", label: "Produto", className: "w-[42%]" },
-                  { key: "classe", label: "ABC", className: "w-[54px]", render: (v) => severityBadge(v, "red") },
-                  { key: "qtdVendida", label: "Vendas", className: "w-[64px]", render: (v) => number(v) },
-                  { key: "estoque", label: "Est.", className: "w-[58px]", render: (v) => <span className="font-semibold text-[#ff9a78]">{number(v)}</span> },
+                  { key: "ref", label: "Produto", className: "w-[38%]" },
+                  { key: "classe", label: "ABC", className: "w-[42px]", render: (v) => severityBadge(v, "red") },
+                  { key: "qtdVendida", label: "Vendas", className: "w-[54px]", render: (v) => number(v) },
+                  { key: "estoque", label: "Est.", className: "w-[46px]", render: (v) => <span className="font-semibold text-[#ff9a78]">{number(v)}</span> },
                   { key: "receita", label: "Receita", render: (v) => currency(v) },
                 ],
                 riscoRuptura,
@@ -838,10 +924,10 @@ export default function DashboardLosNeto() {
               <div className="hidden md:block">
               {compactTable(
                 [
-                  { key: "ref", label: "Produto", className: "w-[42%]" },
-                  { key: "prioridade", label: "Prior.", className: "w-[72px]", render: (v) => severityBadge(v, "red") },
-                  { key: "estoque", label: "Est.", className: "w-[58px]", render: (v) => <span className="font-semibold text-[#ff7a55]">{number(v)}</span> },
-                  { key: "qtdVendida", label: "Vendas", className: "w-[64px]", render: (v) => number(v) },
+                  { key: "ref", label: "Produto", className: "w-[38%]" },
+                  { key: "prioridade", label: "Prior.", className: "w-[58px]", render: (v) => severityBadge(v, "red") },
+                  { key: "estoque", label: "Est.", className: "w-[46px]", render: (v) => <span className="font-semibold text-[#ff7a55]">{number(v)}</span> },
+                  { key: "qtdVendida", label: "Vendas", className: "w-[54px]", render: (v) => number(v) },
                   { key: "receita", label: "Receita", render: (v) => currency(v) },
                 ],
                 prioridadeReposicao,
@@ -861,10 +947,10 @@ export default function DashboardLosNeto() {
               <div className="hidden md:block">
               {compactTable(
                 [
-                  { key: "ref", label: "Produto", className: "w-[42%]" },
-                  { key: "classe", label: "ABC", className: "w-[54px]", render: (v) => severityBadge(v, "amber") },
-                  { key: "estoque", label: "Est.", className: "w-[64px]", render: (v) => <span className="font-semibold text-[#f2c36b]">{number(v)}</span> },
-                  { key: "qtdVendida", label: "Venda", className: "w-[64px]", render: (v) => number(v) },
+                  { key: "ref", label: "Produto", className: "w-[52%]" },
+                  { key: "classe", label: "ABC", className: "w-[42px]", render: (v) => severityBadge(v, "amber") },
+                  { key: "estoque", label: "Est.", className: "w-[54px]", render: (v) => <span className="font-semibold text-[#f2c36b]">{number(v)}</span> },
+                  { key: "qtdVendida", label: "Venda", className: "w-[50px]", render: (v) => number(v) },
                 ],
                 excessoEstoque,
                 "amber",

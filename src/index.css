@@ -25,6 +25,172 @@ button {
   font: inherit;
 }
 
+.theme-light {
+  color: #2f2924;
+  background: #f4efe8;
+}
+
+.theme-light > .sticky {
+  border-color: rgba(120, 92, 76, 0.22) !important;
+  background: rgba(246, 241, 234, 0.94) !important;
+  box-shadow: 0 14px 34px rgba(51, 31, 20, 0.12) !important;
+}
+
+.theme-light main {
+  background: #f4efe8 !important;
+  color: #2f2924 !important;
+}
+
+.theme-light section,
+.theme-light article {
+  border-color: rgba(120, 92, 76, 0.22);
+}
+
+.theme-light .bg-\[\#242424\],
+.theme-light .bg-\[\#202020\],
+.theme-light .bg-\[\#1b1b1b\],
+.theme-light .bg-\[\#1c1c1c\] {
+  background-color: #fffaf4 !important;
+}
+
+.theme-light .bg-\[\#151515\],
+.theme-light .bg-\[\#171717\] {
+  background-color: #fff8ef !important;
+}
+
+.theme-light .bg-\[\#1b1b1b\] {
+  background-color: #f7efe5 !important;
+}
+
+.theme-light .bg-\[\#331d18\],
+.theme-light .bg-\[\#351915\],
+.theme-light .bg-\[\#332018\],
+.theme-light .bg-\[\#2c1d17\],
+.theme-light .bg-\[\#301916\],
+.theme-light .bg-\[\#252119\],
+.theme-light .bg-\[\#332916\] {
+  background-color: #fff1e8 !important;
+}
+
+.theme-light .bg-\[linear-gradient\(135deg\,\#242424_0\%\,\#1a1a1a_58\%\,\#241713_100\%\)\] {
+  background: linear-gradient(135deg, #fff8ef 0%, #f7efe5 62%, #fff1e8 100%) !important;
+}
+
+.theme-light .text-stone-100,
+.theme-light .text-stone-200,
+.theme-light .text-stone-300,
+.theme-light .text-white {
+  color: #2f2924 !important;
+}
+
+.theme-light .text-stone-400,
+.theme-light .text-stone-500 {
+  color: #7b6d63 !important;
+}
+
+.theme-light .text-\[\#ff7148\],
+.theme-light .text-\[\#ff7a55\],
+.theme-light .text-\[\#ff8a66\],
+.theme-light .text-\[\#ff9a78\],
+.theme-light .text-\[\#f2c36b\] {
+  color: #b84324 !important;
+}
+
+.theme-light .text-\[\#e34a22\],
+.theme-light .text-\[\#d63a17\] {
+  color: #c53a1d !important;
+}
+
+.theme-light .border-stone-800,
+.theme-light .border-stone-700,
+.theme-light .border-white\/10 {
+  border-color: rgba(120, 92, 76, 0.22) !important;
+}
+
+.theme-light .shadow-\[0_18px_45px_rgba\(0\,0\,0\,0\.22\)\],
+.theme-light .shadow-\[0_22px_55px_rgba\(0\,0\,0\,0\.28\)\] {
+  box-shadow: 0 18px 45px rgba(51, 31, 20, 0.1) !important;
+}
+
+.theme-light .bg-black\/15,
+.theme-light .bg-black\/18,
+.theme-light .bg-black\/20,
+.theme-light .bg-black\/25,
+.theme-light .bg-black\/30 {
+  background-color: rgba(255, 255, 255, 0.62) !important;
+}
+
+.theme-light table .bg-\[\#242424\],
+.theme-light tbody.bg-\[\#242424\] {
+  background-color: #fffaf4 !important;
+}
+
+.theme-light thead.bg-\[\#1b1b1b\],
+.theme-light .bg-\[\#1b1b1b\].text-\[10px\] {
+  background-color: #efe5d9 !important;
+}
+
+.theme-light tbody.divide-y {
+  border-color: rgba(120, 92, 76, 0.2) !important;
+}
+
+.theme-light tr.hover\:bg-\[\#2d2d2d\]:hover {
+  background-color: #f6eadf !important;
+}
+
+.theme-light tr.bg-\[\#331d18\] {
+  background-color: #fde7dc !important;
+}
+
+.theme-light .bg-stone-800,
+.theme-light .bg-stone-900 {
+  background-color: #eaded2 !important;
+  color: #3f342d !important;
+}
+
+.theme-light .text-stone-300 {
+  color: #3f342d !important;
+}
+
+.theme-light .ring-stone-700 {
+  --tw-ring-color: rgba(92, 74, 62, 0.32) !important;
+}
+
+.theme-light .ring-\[\#79301f\],
+.theme-light .ring-\[\#ef6a3a\],
+.theme-light .ring-\[\#884027\],
+.theme-light .ring-\[\#74572b\] {
+  --tw-ring-color: rgba(184, 67, 36, 0.28) !important;
+}
+
+.theme-light .bg-\[\#d63a17\] {
+  background-color: #d94624 !important;
+  color: #fffaf4 !important;
+}
+
+.theme-light .bg-\[\#232323\] {
+  background-color: #fffaf4 !important;
+  color: #5f5047 !important;
+}
+
+.theme-light .hover\:bg-\[\#2b211e\]:hover {
+  background-color: #fff1e8 !important;
+}
+
+.theme-light button.border-white\/10 {
+  border-color: rgba(120, 92, 76, 0.24) !important;
+}
+
+.theme-light button.text-stone-200,
+.theme-light button.text-stone-400 {
+  color: #5f5047 !important;
+}
+
+.theme-light button.bg-\[\#d63a17\],
+.theme-light button.bg-\[\#d63a17\] svg {
+  color: #fffaf4 !important;
+}
+
 .screen-print-preview {
   padding: 16px 10px 40px;
   background: #1c1c1c;
