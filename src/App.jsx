@@ -88,39 +88,35 @@ export default function App() {
             <h1 className="text-sm font-semibold tracking-tight text-stone-100 sm:text-base">Análise Vendas x Estoque</h1>
           </div>
 
-          <div className="grid gap-1.5 rounded-[13px] border border-white/10 bg-black/15 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_10px_26px_rgba(0,0,0,0.18)] sm:grid-cols-[auto_auto] md:w-auto">
-            <div className="grid grid-cols-2 gap-0.5 rounded-[10px] bg-black/25 p-0.5 shadow-inner shadow-black/30">
-              {modes.map((item) => {
-                const active = mode === item.id;
+          <div className="grid grid-cols-4 gap-1 rounded-[13px] border border-white/10 bg-black/15 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_10px_26px_rgba(0,0,0,0.18)] sm:w-auto">
+            {modes.map((item) => {
+              const active = mode === item.id;
 
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setMode(item.id)}
-                    title={item.label}
-                    aria-label={item.label}
-                    className={[
-                      "inline-flex h-9 w-11 items-center justify-center rounded-[8px] text-[11px] font-semibold transition md:h-8 md:w-10",
-                      active
-                        ? "bg-[#d63a17] text-white shadow-[0_6px_16px_rgba(214,58,23,0.22)] ring-1 ring-[#ff7148]/30"
-                        : "text-stone-400 hover:bg-white/5 hover:text-stone-100",
-                    ].join(" ")}
-                    aria-pressed={active}
-                  >
-                    <UiIcon type={item.icon} className="h-3.5 w-3.5" />
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="grid grid-cols-2 gap-0.5">
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setMode(item.id)}
+                  title={item.label}
+                  aria-label={item.label}
+                  className={[
+                    "inline-flex h-9 min-w-0 items-center justify-center rounded-[9px] text-[11px] font-semibold transition sm:h-8 sm:w-10",
+                    active
+                      ? "bg-[#d63a17] text-white shadow-[0_6px_16px_rgba(214,58,23,0.22)] ring-1 ring-[#ff7148]/30"
+                      : "text-stone-400 hover:bg-white/5 hover:text-stone-100",
+                  ].join(" ")}
+                  aria-pressed={active}
+                >
+                  <UiIcon type={item.icon} className="h-3.5 w-3.5" />
+                </button>
+              );
+            })}
               <button
                 type="button"
                 onClick={() => setTheme(isLightTheme ? "dark" : "light")}
                 title={isLightTheme ? "Usar modo escuro" : "Usar modo claro"}
                 aria-label={isLightTheme ? "Usar modo escuro" : "Usar modo claro"}
-                className="inline-flex h-9 w-full items-center justify-center rounded-[10px] border border-white/10 bg-[#232323] text-stone-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:border-[#d63a17]/70 hover:bg-[#2b211e] hover:text-white md:h-8 md:w-10"
+                className="inline-flex h-9 min-w-0 items-center justify-center rounded-[9px] border border-white/10 bg-[#232323] text-stone-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:border-[#d63a17]/70 hover:bg-[#2b211e] hover:text-white sm:h-8 sm:w-10"
               >
                 <UiIcon type={isLightTheme ? "moon" : "sun"} className="h-3.5 w-3.5" />
               </button>
@@ -129,11 +125,10 @@ export default function App() {
                 onClick={() => window.print()}
                 title="Imprimir / PDF"
                 aria-label="Imprimir / PDF"
-                className="inline-flex h-9 w-full items-center justify-center rounded-[10px] border border-white/10 bg-[#232323] text-stone-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:border-[#d63a17]/70 hover:bg-[#2b211e] hover:text-white md:h-8 md:w-10"
+                className="inline-flex h-9 min-w-0 items-center justify-center rounded-[9px] border border-white/10 bg-[#232323] text-stone-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:border-[#d63a17]/70 hover:bg-[#2b211e] hover:text-white sm:h-8 sm:w-10"
               >
                 <UiIcon type="print" className="h-3.5 w-3.5" />
               </button>
-            </div>
           </div>
         </div>
       </div>
